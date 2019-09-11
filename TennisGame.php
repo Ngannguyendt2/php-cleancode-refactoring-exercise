@@ -12,21 +12,44 @@ const THREESCORE = 3;
 class TennisGame
 {
     public $score = '';
-
-    public function getScore($scorePlayer1, $scorePlayer2)
+    private $scorePlayer1;
+    private $scorePlayer2;
+    public function __construct($scorePlayer1,$scorePlayer2)
     {
-        if ($scorePlayer1 == $scorePlayer2) {
+        $this->scorePlayer1=$scorePlayer1;
+        $this->scorePlayer2=$scorePlayer2;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getScorePlayer1()
+    {
+        return $this->scorePlayer1;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getScorePlayer2()
+    {
+        return $this->scorePlayer2;
+    }
+
+    public function getScore()
+    {
+        if ($this->getScorePlayer1() == $this->getScorePlayer2()) {
             $this->checkScoreEqual();
-        } else if ($scorePlayer1 >= 4 || $scorePlayer2 >= 4) {
-            $this->checkPlayerWin($scorePlayer1, $scorePlayer2);
+        } else if ($this->getScorePlayer1() >= 4 || $this->getScorePlayer2() >= 4) {
+            $this->checkPlayerWin();
         } else {
-            $this->readScore($scorePlayer1, $scorePlayer2);
+            $this->readScore();
         }
     }
 
-    public function checkScoreEqual($scorePlayer1)
+    public function checkScoreEqual()
     {
-        switch ($scorePlayer1) {
+        switch ($this->getScorePlayer1()) {
             case ZEROSCORE:
                 $this->score = "Love-All";
                 break;
@@ -46,13 +69,13 @@ class TennisGame
         }
     }
 
-    public function readScore($scorePlayer1, $scorePlayer2)
+    public function readScore()
     {
         for ($i = 1; $i < 3; $i++) {
-            if ($i == 1) $tempScore = $scorePlayer1;
+            if ($i == 1) $tempScore = $this->getScorePlayer1();
             else {
                 $this->score .= "-";
-                $tempScore = $scorePlayer2;
+                $tempScore = $this->getScorePlayer2();
             }
             switch ($tempScore) {
                 case ZEROSCORE:
@@ -72,18 +95,18 @@ class TennisGame
 
     }
 
-    public function checkPlayerWin($scorePlayer1, $scorePlayer2)
+    public function checkPlayerWin()
     {
-        $minusResult = $this->getMinusResult($scorePlayer1, $scorePlayer2);
+        $minusResult = $this->getMinusResult();
         if ($minusResult == 1) $this->score = "Advantage player1";
         else if ($minusResult == -1) $this->score = "Advantage player2";
         else if ($minusResult >= 2) $this->score = "Win for player1";
         else $this->score = "Win for player2";
     }
 
-    function getMinusResult($scorePlayer1, $scorePlayer2)
+    function getMinusResult()
     {
-        $minusResult = $scorePlayer1 - $scorePlayer2;
+        $minusResult = $this->getScorePlayer1() - $this->getScorePlayer2();
         return $minusResult;
     }
 
